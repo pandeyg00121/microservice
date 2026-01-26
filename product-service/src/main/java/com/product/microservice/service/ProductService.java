@@ -18,13 +18,17 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     public void createProduct(ProductRequest productRequest) {
+
+        // map ProductRequest (DTO) ---> Product(Entity)
         Product product = Product.builder()
                 .name(productRequest.name())
                 .description(productRequest.description())
                 .price(productRequest.price())
                 .build();
 
+        //Save Product to ProductRepository
         productRepository.save(product);
+
         log.info("Product {} is saved", product.getId());
     }
 
