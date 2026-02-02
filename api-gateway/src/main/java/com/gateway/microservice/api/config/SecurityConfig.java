@@ -8,11 +8,16 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+
+    private final String[] freeResourceUrls = {"/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/aggregate/**"};
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 //        Think of SecurityFilterChain as: The firewall of your API Gateway
 //        HttpSecurity httpSecurity : This is Spring’s DSL for: auth rules ,JWT handling ,CSRF ,sessions
         return httpSecurity.authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(freeResourceUrls)
+                        .permitAll()
                         .anyRequest().authenticated())  //Core security rule : Every single API call must be authenticated & No public endpoints
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .build();   // Creates the security filter chain.
